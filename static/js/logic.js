@@ -1,4 +1,4 @@
-// Store our API endpoint inside queryUrl
+// Store our API endpoints inside Urls
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
 // Perform a GET request to the query URL
@@ -44,6 +44,7 @@ function createFeatures(earthquakeData) {
   // Sending our earthquakes layer to the createMap function
   createMap(earthquakes);
 }
+
 
 // Define a function to assign circle color to be based on depth
 function getColor(d) {
@@ -93,9 +94,10 @@ function createMap(earthquakes) {
     "Satellite Map": satellitemap
   };
 
+
   // Create overlay object to hold our overlay layer
   var overlayMaps = {
-    Earthquakes: earthquakes
+    Earthquakes: earthquakes,
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -134,4 +136,5 @@ function createMap(earthquakes) {
   };
 
   legend.addTo(myMap);
+
 }
