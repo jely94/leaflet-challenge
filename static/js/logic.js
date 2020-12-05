@@ -27,7 +27,7 @@ function createFeatures(earthquakeData) {
     return {
       color: "black",
       weight: 1,
-      radius: getRadius(geoJsonFeature.properties.mag) * 3,
+      radius: getRadius(geoJsonFeature.properties.mag) * 2.5,
      fillColor: getColor(geoJsonFeature.geometry.coordinates[2]),
      fillOpacity: .8
     }
@@ -45,15 +45,17 @@ function createFeatures(earthquakeData) {
   createMap(earthquakes);
 }
 
+// Define a function to assign circle color to be based on depth
 function getColor(d) {
-  return d > 90 ? '#800026' :
-         d > 70  ? '#BD0026' :
-         d > 50  ? '#E31A1C' :
-         d > 30  ? '#FC4E2A' :
-         d > 10  ? '#FD8D3C' :
-                    '#FFEDA0';
+  return d > 90 ? '#FF0080' :
+         d > 70 ? '#FF00FF' :
+         d > 50 ? '#8000FF' :
+         d > 30 ? '#0000FF' :
+         d > 10 ? '#0080FF' :
+                  '#00FFFF';
 }
 
+// Define a function to determine radius to be based on magnitude
 function getRadius(d) {
   return d
 }
@@ -91,9 +93,9 @@ function createMap(earthquakes) {
   // Create our map, giving it the streetmap and earthquakes layers to display on load
   var myMap = L.map("mapid", {
     center: [
-      37.09, -95.71
+      40.76, -111.89
     ],
-    zoom: 4,
+    zoom: 5,
     layers: [streetmap, earthquakes]
   });
 
@@ -104,6 +106,7 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
+  // Add ledgend to the map
   var legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (map) {
