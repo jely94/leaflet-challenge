@@ -1,5 +1,5 @@
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function (data) {
@@ -14,16 +14,20 @@ function createFeatures(earthquakeData) {
   // Give each feature a popup describing the place and time of the earthquake
   function addTooltip(feature, mapObject) {
     mapObject.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+      "</h3><hr><p>Magnitude: " +  feature.properties.mag + "</p><hr><p>Depth: " +  feature.geometry.coordinates[2] + "</p>");
   }
 
+  // Define a function to create the circle markers
   function createCircle(geoJsonPoint, latlng) {
     return L.circleMarker(latlng);
   }
 
+  // Define a function to add color based on depth and radius size based on magnitude
   function createStyle(geoJsonFeature) {
     return {
-      radius: 10,
+      color: "black",
+      weight: 1,
+      radius: getRadius(geoJsonFeature.properties.mag) * 3,
      fillColor: getColor(geoJsonFeature.geometry.coordinates[2]),
      fillOpacity: .8
     }
@@ -48,6 +52,10 @@ function getColor(d) {
          d > 30  ? '#FC4E2A' :
          d > 10  ? '#FD8D3C' :
                     '#FFEDA0';
+}
+
+function getRadius(d) {
+  return d
 }
 
 function createMap(earthquakes) {
@@ -85,7 +93,7 @@ function createMap(earthquakes) {
     center: [
       37.09, -95.71
     ],
-    zoom: 5,
+    zoom: 4,
     layers: [streetmap, earthquakes]
   });
 
