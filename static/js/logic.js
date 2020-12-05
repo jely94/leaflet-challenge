@@ -1,5 +1,5 @@
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function (data) {
@@ -27,7 +27,7 @@ function createFeatures(earthquakeData) {
     return {
       color: "black",
       weight: 1,
-      radius: getRadius(geoJsonFeature.properties.mag) * 2.5,
+      radius: getRadius(geoJsonFeature.properties.mag) * 3,
      fillColor: getColor(geoJsonFeature.geometry.coordinates[2]),
      fillOpacity: .8
     }
