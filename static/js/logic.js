@@ -1,5 +1,5 @@
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl, function (data) {
@@ -14,7 +14,7 @@ function createFeatures(earthquakeData) {
   // Give each feature a popup describing the place and time of the earthquake
   function addTooltip(feature, mapObject) {
     mapObject.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>Magnitude: " +  feature.properties.mag + "</p><hr><p>Depth: " +  feature.geometry.coordinates[2] + "</p>");
+      "</h3><hr><p>Magnitude: " + feature.properties.mag + "</p><hr><p>Depth: " + feature.geometry.coordinates[2] + "</p>");
   }
 
   // Define a function to create the circle markers
@@ -27,9 +27,9 @@ function createFeatures(earthquakeData) {
     return {
       color: "black",
       weight: 1,
-      radius: getRadius(geoJsonFeature.properties.mag) * 3,
-     fillColor: getColor(geoJsonFeature.geometry.coordinates[2]),
-     fillOpacity: .8
+      radius: getRadius(geoJsonFeature.properties.mag) * 4,
+      fillColor: getColor(geoJsonFeature.geometry.coordinates[2]),
+      fillOpacity: .8
     }
   }
 
@@ -48,11 +48,11 @@ function createFeatures(earthquakeData) {
 // Define a function to assign circle color to be based on depth
 function getColor(d) {
   return d > 90 ? '#FF0080' :
-         d > 70 ? '#FF00FF' :
-         d > 50 ? '#8000FF' :
-         d > 30 ? '#0000FF' :
-         d > 10 ? '#0080FF' :
-                  '#00FFFF';
+    d > 70 ? '#FF00FF' :
+      d > 50 ? '#8000FF' :
+        d > 30 ? '#0000FF' :
+          d > 10 ? '#0080FF' :
+            '#00FFFF';
 }
 
 // Define a function to determine radius to be based on magnitude
@@ -82,7 +82,7 @@ function createMap(earthquakes) {
   var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
     maxZoom: 18,
-    id: "satellite-v9",
+    id: "satellite-streets-v11",
     accessToken: API_KEY
   });
 
@@ -115,23 +115,23 @@ function createMap(earthquakes) {
   }).addTo(myMap);
 
   // Add ledgend to the map
-  var legend = L.control({position: 'bottomright'});
+  var legend = L.control({ position: 'bottomright' });
 
-legend.onAdd = function (map) {
+  legend.onAdd = function (map) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-        grades = [-10, 10, 30, 50, 70, 90],
-        labels = [];
+      grades = [-10, 10, 30, 50, 70, 90],
+      labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
-        div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-            grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      div.innerHTML +=
+        '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
     }
 
     return div;
-};
+  };
 
-legend.addTo(myMap);
+  legend.addTo(myMap);
 }
